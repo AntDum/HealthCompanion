@@ -1,7 +1,34 @@
+"""
+Ce fichier contient des fonctions pour envoyé des requêtes à la base de données.
+"""
+from CouchDBClient import CouchDBClient
 
+_client = None
 
-# Données fictives pour démonstration
-# Il faut mettre un CouchDB ici normalement
+def get_client():
+    global _client
+    if _client is None:
+        _client = CouchDBClient()
+    return _client
+
+def create_fictive_data():
+    client = get_client()
+    
+    client.reset()
+    
+    client.createDatabase('users')
+    client.createDatabase('patients')
+    
+    # Créer les utilisateurs fictifs
+    for user in users:
+        client.addDocument('users', user)
+    
+    # Créer les patients fictifs
+    for patient in patients_data:
+        client.addDocument('patients', patient)
+        
+    # Créer les notifications fictives pour le médecin
+    
 
 
 # Utilisateurs fictifs pour démonstration

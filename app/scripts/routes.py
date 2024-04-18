@@ -1,5 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, Blueprint
-from flask_bootstrap import Bootstrap
+from flask import render_template, request, redirect, url_for, flash, Blueprint
 
 import scripts.db_helpers as db
 
