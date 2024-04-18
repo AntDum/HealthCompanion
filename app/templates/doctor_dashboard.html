@@ -1,0 +1,44 @@
+<!-- doctor_dashboard.html -->
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Tableau de Bord Médecin</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Liste des Patients</h3>
+            <div class="list-group" id="patient-list">
+                <!-- Liste des patients avec leurs informations -->
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h3>Rappels et Notifications</h3>
+            <div class="list-group" id="doctor-reminders">
+                <!-- Liste des rappels et notifications pour le médecin -->
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <h3>Gestion des Rendez-vous</h3>
+            <div class="list-group" id="appointments">
+                <!-- Liste des rendez-vous avec les patients -->
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h3>Communication avec les Patients</h3>
+            <form id="communication-form" class="mb-3">
+                <div class="form-group">
+                    <label for="message">Message :</label>
+                    <textarea class="form-control" id="message" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Envoyer</button>
+            </form>
+            <div id="patient-messages" class="list-group">
+                <!-- Affichage des messages des patients -->
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='js/script_doctor.js') }}"></script>
+{% endblock %}
