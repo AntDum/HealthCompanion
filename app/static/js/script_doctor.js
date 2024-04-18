@@ -9,7 +9,7 @@ function fetchPatient() {
             const patientListElement = document.getElementById("patient-list");
             response.data.forEach(function (patient) {
                 const listItem = document.createElement("li");
-                listItem.textContent = `Nom: ${patient.name} | Age: ${patient.age} | Dernière consultation: ${patient.last_visit}`;
+                listItem.textContent = `Nom: ${patient.name} | Date de naissance: ${patient.birthdate} | Dernière consultation: ${patient.last_visit}`;
                 patientListElement.appendChild(listItem);
             });
         })

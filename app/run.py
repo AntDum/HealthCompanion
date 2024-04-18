@@ -3,6 +3,8 @@ from flask import Flask
 from scripts.routes import routes
 from scripts.api_data import api_data
 
+from scripts.db_helpers import make_default_db, get_client
+
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
@@ -13,6 +15,7 @@ app.config['TEMPLATE_FOLDER'] = 'app/templates'
 app.register_blueprint(routes)
 app.register_blueprint(api_data)
 
-
 if __name__ == '__main__':
+    make_default_db()
+    
     app.run(debug=True)
