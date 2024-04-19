@@ -29,27 +29,34 @@ def create_fictive_data():
 
     client.reset()
 
-    # Créer les utilisateurs fictifs
-    client.createDatabase("users")
-    for user in users:
-        client.addDocument("users", user)
-
+    p_keys = []
     # Créer les patients fictifs
     client.createDatabase("patients")
     for patient in patients_data:
-        patient["health_data"] = patient_health_data  # type: ignore
-        patient["reminders"] = patient_reminders  # type: ignore
-        patient["medications"] = patient_medications  # type: ignore
 
-        client.addDocument("patients", patient)
+        key = client.addDocument("patients", patient)
+        p_keys.append(key)
 
+    d_keys = []
     # Créer les notifications fictives pour le médecin
     client.createDatabase("doctor")
-    for doctor in doctor_inami:
-        doctor["notifications"] = doctor_notifications
-        doctor["appointments"] = appointments_data
 
-        client.addDocument("doctor", doctor)
+    for doctor in doctor_inami:
+        for i, appointment in enumerate(doctor["appointments"]):
+            appointment["patient_id"] = p_keys[i]
+
+        key = client.addDocument("doctor", doctor)
+        d_keys.append(key)
+
+    # Créer les utilisateurs fictifs
+    client.createDatabase("users")
+    for user in users:
+        if user["role"] == "patient":
+            user["patient_id"] = p_keys.pop()
+        elif user["role"] == "doctor":
+            user["doctor_id"] = d_keys.pop()
+
+        client.addDocument("users", user)
 
 
 def make_all_view():
@@ -57,9 +64,6 @@ def make_all_view():
 
     # Créer la vue pour les utilisateurs
     client.installView("users", "users", "all", "function(doc) { emit(doc._id, doc); }")
-    client.installView(
-        "users", "users", "by_role", "function(doc) { emit(doc.role, doc); }"
-    )
     client.installView(
         "users",
         "doctor",
@@ -93,53 +97,143 @@ users = [
 
 # Données fictives des patients
 patients_data = [
-    {"name": "Jean Dupont", "birthdate": "29/2/2000", "last_visit": "2022-04-01"},
-    {"name": "Marie Martin", "birthdate": "29/2/2000", "last_visit": "2022-03-28"},
-    {"name": "Pierre Dubois", "birthdate": "29/2/2000", "last_visit": "2022-03-15"},
-]
-
-# Rendez-vous fictifs avec les patients
-appointments_data = [
-    {"patient": "Jean Dupont", "date": "2022-04-15", "time": "10h00"},
-    {"patient": "Marie Martin", "date": "2022-04-20", "time": "14h30"},
-]
-
-
-# Données fictives pour démonstration
-patient_health_data = {
-    "temperature": 37.5,
-    "heartRate": 72,
-    "bloodPressure": "120/80",
-    "weight": 75,
-    "height": 175,
-}
-
-patient_reminders = [
     {
-        "type": "Medication",
-        "message": "Prendre le médicament XYZ à 8h00 tous les jours.",
+        "name": "Jean Dupont",
+        "birthdate": "29/2/2000",
+        "last_visit": "2022-04-01",
+        "health_data": [
+            {
+                "temperature": 37.5,
+                "heartRate": 72,
+                "bloodPressure": "120/80",
+                "weight": 75,
+                "height": 175,
+            }
+        ],
+        "reminders": [
+            {
+                "type": "Medication",
+                "message": "Prendre le médicament XYZ à 8h00 tous les jours.",
+            },
+            {
+                "type": "Appointment",
+                "message": "Rendez-vous avec le médecin le 15/04/2024 à 14h00.",
+            },
+        ],
+        "medications": [
+            {"name": "Médicament XYZ", "dosage": "2 comprimés", "schedule": "Matin"},
+            {"name": "Vaccin ABC", "dosage": "1 dose", "schedule": "20/04/2024"},
+        ],
     },
     {
-        "type": "Appointment",
-        "message": "Rendez-vous avec le médecin le 15/04/2024 à 14h00.",
+        "name": "Marie Martin",
+        "birthdate": "29/2/2000",
+        "last_visit": "2022-03-28",
+        "health_data": [
+            {
+                "temperature": 37.5,
+                "heartRate": 72,
+                "bloodPressure": "120/80",
+                "weight": 75,
+                "height": 175,
+            }
+        ],
+        "reminders": [
+            {
+                "type": "Medication",
+                "message": "Prendre le médicament XYZ à 8h00 tous les jours.",
+            },
+            {
+                "type": "Appointment",
+                "message": "Rendez-vous avec le médecin le 15/04/2024 à 14h00.",
+            },
+        ],
+        "medications": [
+            {"name": "Médicament XYZ", "dosage": "2 comprimés", "schedule": "Matin"},
+            {"name": "Vaccin ABC", "dosage": "1 dose", "schedule": "20/04/2024"},
+        ],
+    },
+    {
+        "name": "Pierre Dubois",
+        "birthdate": "29/2/2000",
+        "last_visit": "2022-03-15",
+        "health_data": [
+            {
+                "temperature": 37.5,
+                "heartRate": 72,
+                "bloodPressure": "120/80",
+                "weight": 75,
+                "height": 175,
+            }
+        ],
+        "reminders": [
+            {
+                "type": "Medication",
+                "message": "Prendre le médicament XYZ à 8h00 tous les jours.",
+            },
+            {
+                "type": "Appointment",
+                "message": "Rendez-vous avec le médecin le 15/04/2024 à 14h00.",
+            },
+        ],
+        "medications": [
+            {"name": "Médicament XYZ", "dosage": "2 comprimés", "schedule": "Matin"},
+            {"name": "Vaccin ABC", "dosage": "1 dose", "schedule": "20/04/2024"},
+        ],
     },
 ]
 
-patient_medications = [
-    {"name": "Médicament XYZ", "dosage": "2 comprimés", "schedule": "Matin"},
-    {"name": "Vaccin ABC", "dosage": "1 dose", "schedule": "20/04/2024"},
-]
 
 # Données fictives pour le médecin
 doctor_inami = [
-    {"inami": "123456", "name": "Dr. Dupont", "notifications": []},
-    {"inami": "654321", "name": "Dr. Martin", "notifications": []},
-]
-
-# Rappels et notifications fictifs pour le médecin
-doctor_notifications = [
-    {"message": "Rappel: Rendez-vous avec Jean Dupont le 2022-04-15"},
-    {"message": "Rappel: Vaccination de Marie Martin le 2022-04-20"},
+    {
+        "inami": "123456",
+        "name": "Dr. Dupont",
+        "notifications": [
+            {"message": "Rappel: Rendez-vous avec Jean Dupont le 2022-04-15"},
+            {"message": "Rappel: Vaccination de Marie Martin le 2022-04-20"},
+        ],
+        "appointments": [
+            {
+                "patient_id": -1,
+                "patient": "Jean Dupont",
+                "date": "2022-04-15",
+                "time": "10h00",
+                "reason": "Consultation",
+            },
+            {
+                "patient_id": -2,
+                "patient": "Marie Martin",
+                "date": "2022-04-20",
+                "time": "14h30",
+                "reason": "Vaccination",
+            },
+        ],
+    },
+    {
+        "inami": "654321",
+        "name": "Dr. Martin",
+        "notifications": [
+            {"message": "Rappel: Rendez-vous avec Pierre Dubois le 2022-04-15"},
+            {"message": "Rappel: Vaccination de Jean Dupont le 2022-04-20"},
+        ],
+        "appointments": [
+            {
+                "patient_id": -3,
+                "patient": "Pierre Dubois",
+                "date": "2022-04-15",
+                "time": "10h00",
+                "reason": "Consultation",
+            },
+            {
+                "patient_id": -1,
+                "patient": "Jean Dupont",
+                "date": "2022-04-20",
+                "time": "14h30",
+                "reason": "Vaccination",
+            },
+        ],
+    },
 ]
 
 
