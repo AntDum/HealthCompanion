@@ -1,9 +1,18 @@
-from flask import request, jsonify, Blueprint
+from flask import request, jsonify, Blueprint, session
 import json
 import scripts.db_helpers as db
 
 api_data = Blueprint('api_data', __name__)
 
+def check_auth():
+    if 'loggedin' not in session or not session['loggedin']:
+        return False
+    return True
+
+@api_data.before_request
+def before_request():
+    if not check_auth():
+        return jsonify({"error": "Not authorized"}), 401
 
 # Route pour récupérer la liste des patients
 @api_data.route('/api/patients')
@@ -46,19 +55,19 @@ def get_patient_health_data():
 #     return jsonify(db.get_patient_reminders())
 
 # Nouvelle route pour récupérer les médicaments et vaccinations du patient
-@api_data.route('/api/patients/medications')
-def get_patient_medications():
-    return jsonify(db.get_patient_medications())
+# @api_data.route('/api/patients/medications')
+# def get_patient_medications():
+#     return jsonify(db.get_patient_medications())
 
 
 @api_data.route('/api/patients/vaccine', methods=['POST'])
 def add_vaccine():
-    print("VACCINE")
     data = json.loads(request.get_data())
-    if 'vaccine' not in data:
-        return jsonify({"error": "Vaccine is required"}), 400
     
     patient = db.get_patient_by_id(data['patient_id'])
+    
+    if patient is None:
+        return jsonify({"error": "Patient not found"})
     
     vaccine = {
         "date": data['vaccine_date'],
@@ -72,13 +81,8 @@ def add_vaccine():
 
 @api_data.route('/api/patients/vaccine', methods=['GET'])
 def get_vaccines():
-    return jsonify(db.get_patient_vaccines())
+    return jsonify(db.get_patient_vaccines(session["id"]))
 
-
-#@api_data.route('/api/patients/patient', methods = ["POST"])
-#def add_patient():
-#   data = json.loads(request.get_data())
-#   patient = {
-#       "name": data[patient_name]
-#       "birthdate": data[birthdate]
-# }
+@api_data.route('/api/vaccine/ref', methods=['GET'])
+def get_vaccine_ref():
+    return jsonify(db.get_all_vaccines_ref())

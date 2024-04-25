@@ -42,25 +42,6 @@ function fetchReminders() {
         });
 }
 
-// Fonction pour récupérer et afficher les médicaments et vaccinations du patient depuis le backend
-function fetchMedications() {
-    axios
-        .get("/api/patients/medications") // Assurez-vous que cette route existe dans votre backend
-        .then(function (response) {
-            const medications = response.data;
-            const medicationsElement = document.getElementById("medications");
-            medicationsElement.innerHTML = medications
-                .map(
-                    (medication) =>
-                        `<li class="list-group-item">${medication.name} - Dosage : ${medication.dosage}, Posologie : ${medication.schedule}</li>`
-                )
-                .join("");
-        })
-        .catch(function (error) {
-            console.error("Erreur lors de la récupération des médicaments et vaccinations:", error);
-        });
-}
-
 // Écouteur d"événement pour soumettre le formulaire de communication avec le médecin
 document.getElementById("communication-form").addEventListener("submit", function (event) {
     event.preventDefault();
@@ -79,6 +60,5 @@ document.getElementById("communication-form").addEventListener("submit", functio
 // Chargement initial des données du dashboard patient
 window.onload = function () {
     fetchHealthData();
-    fetchReminders();
-    fetchMedications();
+    // fetchReminders();
 };

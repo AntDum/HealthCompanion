@@ -29,30 +29,28 @@ def create_fictive_data():
 
     client.reset()
 
-    p_keys = []
     # Créer les patients fictifs
     client.createDatabase("patients")
     for patient in patients_data:
+        client.addDocument("patients", patient)
+        
+    for health_record in health_records:
+        health_record["type"] = "measure"
+        client.addDocument("patients", health_record)
+        
+    for medication in posologie:
+        medication["type"] = "medication"
+        client.addDocument("patients", medication)
 
-        key = client.addDocument("patients", patient)
-        p_keys.append(key)
-
-    d_keys = []
     # Créer les notifications fictives pour le médecin
     client.createDatabase("doctor")
-
     for doctor in doctor_inami:
-        for i, appointment in enumerate(doctor["appointments"]):
-            appointment["patient_id"] = p_keys[i]
-
-        key = client.addDocument("doctor", doctor)
-        d_keys.append(key)
-
-    v_keys = []
-    client.createDatabase("vaccine-reference")
+        client.addDocument("doctor", doctor)
+    
+    # Add data of reference -> vaccines
+    client.createDatabase("vaccine-references")
     for vaccine in vaccine_ref:
-        key = client.addDocument("vaccine-reference", vaccine)
-        v_keys.append(key)
+        client.addDocument("vaccine-references", vaccine)
 
 
 def make_all_view():
@@ -63,6 +61,12 @@ def make_all_view():
         "patients", "patients", "all",
         "function(doc) { if (doc.type === 'patient') { emit(doc._id, doc); }}"
         
+    )
+    
+    # Créer un vue pour patient par email
+    client.installView(
+        "patients", "patients", "by_email",
+        "function(doc) { if (doc.type === 'patient') { emit(doc.email, doc); }}"
     )
     
     # Créer la vue pour les données de santé des patients
@@ -83,10 +87,30 @@ def make_all_view():
         "function(doc) { if (doc.type === 'vaccine') { emit(doc._id, doc); }}"
     )
 
+    client.installView(
+        "patients", "vaccine", "by_patient_id",
+        "function(doc) { if (doc.type === 'vaccine') { emit(doc.patient_id, doc); }}"
+    )
+
     # Créer la vue pour les médecins
     client.installView(
         "doctor",
         "doctor",
+        "all",
+        "function(doc) { emit(doc._id, doc); }"
+    )
+    
+    client.installView(
+        "doctor",
+        "doctor",
+        "by_email",
+        "function(doc) { emit(doc.email, doc); }"
+    )
+    
+    # Créer la vue pour les références des vaccins
+    client.installView(
+        "vaccine-references",
+        "vaccine-references",
         "all",
         "function(doc) { emit(doc._id, doc); }"
     )
@@ -138,52 +162,11 @@ patients_data = [
 # Données fictives pour le médecin
 doctor_inami = [
     {
-        "inami": "123456",
+        # "inami": "123456",
         "name": "Dr. Dupont",
-        "notifications": [
-            {"message": "Rappel: Rendez-vous avec Jean Dupont le 2022-04-15"},
-            {"message": "Rappel: Vaccination de Marie Martin le 2022-04-20"},
-        ],
-        "appointments": [
-            {
-                "patient_id": -1,
-                "patient": "Jean Dupont",
-                "date": "2022-04-15",
-                "time": "10h00",
-                "reason": "Consultation",
-            },
-            {
-                "patient_id": -2,
-                "patient": "Marie Martin",
-                "date": "2022-04-20",
-                "time": "14h30",
-                "reason": "Vaccination",
-            },
-        ],
-    },
-    {
-        "inami": "654321",
-        "name": "Dr. Martin",
-        "notifications": [
-            {"message": "Rappel: Rendez-vous avec Pierre Dubois le 2022-04-15"},
-            {"message": "Rappel: Vaccination de Jean Dupont le 2022-04-20"},
-        ],
-        "appointments": [
-            {
-                "patient_id": -3,
-                "patient": "Pierre Dubois",
-                "date": "2022-04-15",
-                "time": "10h00",
-                "reason": "Consultation",
-            },
-            {
-                "patient_id": -1,
-                "patient": "Jean Dupont",
-                "date": "2022-04-20",
-                "time": "14h30",
-                "reason": "Vaccination",
-            },
-        ],
+        "birthdate": "29/2/2000",
+        "email": "contact@nop.com",
+        "password": "123456",
     },
 ]
 
@@ -237,9 +220,9 @@ def get_appointments():
 
 def get_patient_health_data():
     client = get_client()
-    health_data = client.executeView("patients", "measure", "all")
+    health_data_ = client.executeView("patients", "measure", "all")
     # print("Health data", health_data)
-    return health_data[0]["value"]
+    return health_data_[0]["value"]
 
 
 # def get_patient_reminders():
@@ -249,11 +232,11 @@ def get_patient_health_data():
 #     return patient_reminders_[0]["value"]["reminders"]
 
 
-def get_patient_medications():
-    client = get_client()
-    patient_medications_ = client.executeView("patients", "medication", "all")
-    # print("Medications", patient_medications_)
-    return patient_medications_[0]["value"]
+# def get_patient_medications():
+#     client = get_client()
+#     patient_medications_ = client.
+#     # print("Medications", patient_medications_)
+#     return patient_medications_[0]["value"]
 
 
 def add_vaccines(vaccine) -> str:
@@ -262,9 +245,40 @@ def add_vaccines(vaccine) -> str:
     key = client.addDocument("patients", vaccine)
     return key
 
-def get_patient_vaccines():
+def get_patient_vaccines(patient_id=None):
     client = get_client()
-    patient_vaccines_ = client.executeView("patients", "vaccine", "all")
+    patient_vaccines_ = client.executeView("patients", "vaccine", "by_patient_id", key=patient_id)
     # print("Vaccines", patient_vaccines_)
     return list(map(itemgetter("value"), patient_vaccines_))
 
+def get_all_vaccines_ref():
+    client = get_client()
+    vaccines = client.executeView("vaccine-references", "vaccine-references", "all")
+    # print("Vaccines", vaccines)
+    return list(map(itemgetter("value"), vaccines))
+
+# ========================================================
+
+def patient_already_exists(email) -> bool:
+    client = get_client()
+    patient = client.executeView("patients", "patients", "by_email", key=email)
+    return len(patient) > 0
+
+def get_patient_by_email(email):
+    client = get_client()
+    patient = client.executeView("patients", "patients", "by_email", key=email)
+    if len(patient) == 0:
+        return None
+    return patient[0]["value"]
+
+def doctor_already_exists(email) -> bool:
+    client = get_client()
+    doctor = client.executeView("doctor", "doctor", "by_email", key=email)
+    return len(doctor) > 0
+
+def get_doctor_by_email(email):
+    client = get_client()
+    doctor = client.executeView("doctor", "doctor", "by_email", key=email)
+    if len(doctor) == 0:
+        return None
+    return doctor[0]["value"]

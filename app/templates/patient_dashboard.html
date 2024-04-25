@@ -16,16 +16,6 @@
                 </ul>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <h3>Gestion des Médicaments et Vaccinations</h3>
-            <div class="card mb-4">
-                <ul class="list-group list-group-flush" id="medications">
-                    <!-- Les médicaments et vaccinations seront affichés ici -->
-                </ul>
-            </div>
-        </div>
         <div class="col-md-6">
             <h3>Communication avec le Médecin</h3>
             <form id="communication-form">
@@ -40,6 +30,16 @@
             </div>
         </div>
     </div>
+    <!-- <div class="row">
+        <div class="col-md-6">
+            <h3>Vaccinations</h3>
+            <div class="card mb-4">
+                <ul class="list-group list-group-flush" id="vaccines">
+                    
+                </ul>
+            </div>
+        </div>
+    </div> -->
 </div>
 <script src="{{ url_for('static', filename='js/script_patient.js') }}"></script>
 {% endblock %}

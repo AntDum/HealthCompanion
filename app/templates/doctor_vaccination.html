@@ -1,0 +1,27 @@
+<!-- patient_dashboard.html -->
+{% extends 'layout.html' %} {% block content %}
+<div class="container">
+    <h3>Ajout vaccin</h3>
+    <form id="vaccine-form">
+        <div class="form-group">
+            <label for="vaccine-date">Date de la vaccination:</label>
+            <input type="date" class="form-control" id="vaccine-date" />
+        </div>
+        <div class="form-group">
+            <label for="vaccine-name">Nom du vaccin:</label>
+            <select class="form-control" id="vaccine-name">
+                <option>Diphtérie</option>
+                <option>Tétanos</option>
+                <option>Coqueluche</option>
+                <option>Poliomyélite</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="patient-select">Nom du patient:</label>
+            <select class="form-control" id="patient-select"></select>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+<script src="{{ url_for('static', filename='js/vaccination_doctor.js') }}"></script>
+{% endblock %}

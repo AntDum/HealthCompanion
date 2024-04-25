@@ -1,44 +1,73 @@
 <!-- register.html -->
-{% extends 'layout.html' %}
-
-{% block content %}
+{% extends 'layout.html' %} {% block content %}
 <div class="container">
     <h2>Inscription</h2>
-    <form>
+    <form id="register_form">
         <div class="form-group">
-            <label for="username">Nom d'utilisateur :</label>
-            <input type="text" class="form-control" id="username" placeholder="Entrez votre nom d'utilisateur" required>
+            <label for="username">Nom Prénom :</label>
+            <input
+                type="text"
+                class="form-control"
+                id="username"
+                placeholder="Entrez votre nom"
+                required
+            />
         </div>
         <div class="form-group">
             <label for="email">Adresse Email :</label>
-            <input type="email" class="form-control" id="email" placeholder="Entrez votre adresse email" required>
+            <input
+                type="email"
+                class="form-control"
+                id="email"
+                placeholder="Entrez votre adresse email"
+                required
+            />
         </div>
         <div class="form-group">
             <label for="password">Mot de passe :</label>
-            <input type="password" class="form-control" id="password" placeholder="Entrez votre mot de passe" required>
+            <input
+                type="password"
+                class="form-control"
+                id="password"
+                placeholder="Entrez votre mot de passe"
+                required
+            />
         </div>
         <div class="form-group">
             <label for="birthdate">Date de naissance :</label>
-            <input type ="date" class="form-control" id ="birthdate" placeholder="Entrez votre date de naissance" required>
+            <input
+                type="date"
+                class="form-control"
+                id="birthdate"
+                placeholder="Entrez votre date de naissance"
+                required
+            />
         </div>
-            <label for="email">Je suis un :</label>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"checked>
-                <label class="form-check-label" for="flexRadioDefault1">
-                  patient
-                </label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" >
-                <label class="form-check-label" for="flexRadioDefault2">
-                  médecin
-                </label>
-              </div>
+        <label for="">Je suis un :</label>
+        <div class="form-check">
+            <input
+                class="form-check-input"
+                type="radio"
+                name="flexRadioDefault"
+                id="flexRadioDefault1"
+                checked
+            />
+            <label class="form-check-label" for="flexRadioDefault1"> patient </label>
+        </div>
+        <div class="form-check">
+            <input
+                class="form-check-input"
+                type="radio"
+                name="flexRadioDefault"
+                id="flexRadioDefault2"
+            />
+            <label class="form-check-label" for="flexRadioDefault2"> médecin </label>
         </div>
 
         <button type="submit" class="btn btn-primary">S'inscrire</button>
-
     </form>
     <p>Déjà un compte ? <a href="/">Connectez-vous</a></p>
 </div>
+<script src="{{ url_for('static', filename='js/register.js') }}"></script>
+
 {% endblock %}

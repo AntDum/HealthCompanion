@@ -1,0 +1,14 @@
+<!-- patient_dashboard.html -->
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container">
+    <h3>Vaccinations</h3>
+    <div class="card mb-4">
+        <ul class="list-group list-group-flush" id="vaccines">
+            <!-- Les médicaments et vaccinations seront affichés ici -->
+        </ul>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='js/vaccination_patient.js') }}"></script>
+{% endblock %}
