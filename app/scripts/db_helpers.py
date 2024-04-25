@@ -1,5 +1,5 @@
 """
-Ce fichier contient des fonctions pour envoyé des requêtes à la base de données.
+Ce fichier contient des fonctions pour envoyer des requêtes à la base de données.
 """
 
 from operator import itemgetter
@@ -48,138 +48,89 @@ def create_fictive_data():
         key = client.addDocument("doctor", doctor)
         d_keys.append(key)
 
-    # Créer les utilisateurs fictifs
-    client.createDatabase("users")
-    for user in users:
-        if user["role"] == "patient":
-            user["patient_id"] = p_keys.pop()
-        elif user["role"] == "doctor":
-            user["doctor_id"] = d_keys.pop()
-
-        client.addDocument("users", user)
+    v_keys = []
+    client.createDatabase("vaccine-reference")
+    for vaccine in vaccine_ref:
+        key = client.addDocument("vaccine-reference", vaccine)
+        v_keys.append(key)
 
 
 def make_all_view():
     client = get_client()
 
-    # Créer la vue pour les utilisateurs
-    client.installView("users", "users", "all", "function(doc) { emit(doc._id, doc); }")
-    client.installView(
-        "users",
-        "doctor",
-        "all",
-        "function(doc) { if (doc.role === 'doctor') { emit(doc.username, doc) } }",
-    )
-    client.installView(
-        "users",
-        "patient",
-        "all",
-        "function(doc) { if (doc.role === 'patient') { emit(doc.username, doc) } }",
-    )
-
     # Créer la vue pour les patients
     client.installView(
-        "patients", "patients", "all", "function(doc) { emit(doc._id, doc); }"
+        "patients", "patients", "all",
+        "function(doc) { if (doc.type === 'patient') { emit(doc._id, doc); }}"
+        
+    )
+    
+    # Créer la vue pour les données de santé des patients
+    client.installView(
+        "patients", "measure", "all",
+        "function(doc) { if (doc.type === 'measure') { emit(doc._id, doc); }}"
+    )
+    
+    # Créer la vue pour les médicaments des patients
+    client.installView(
+        "patients", "medication", "all",
+        "function(doc) { if (doc.type === 'medication') { emit(doc._id, doc); }}"
+    )
+    
+    # Créer la vue pour les vaccins des patients
+    client.installView(
+        "patients", "vaccine", "all",
+        "function(doc) { if (doc.type === 'vaccine') { emit(doc._id, doc); }}"
     )
 
     # Créer la vue pour les médecins
     client.installView(
-        "doctor", "doctor", "all", "function(doc) { emit(doc._id, doc); }"
+        "doctor",
+        "doctor",
+        "all",
+        "function(doc) { emit(doc._id, doc); }"
     )
 
 
-# Utilisateurs fictifs pour démonstration
-users = [
-    {"username": "admin", "password": "admin", "role": "doctor"},
-    {"username": "user1", "password": "password", "role": "patient"},
+health_records = [
+    {
+        "type": "measure",
+        "temperature": 37.5,
+        "heartRate": 72,
+        "bloodPressure": "120/80",
+        "weight": 75,
+        "height": 175,
+    }
 ]
 
+posologie = [
+    {
+        "type": "medication",
+        "name": "Médicament XYZ",
+        "dosage": "2 comprimés",
+        "schedule": "Matin",
+    },
+]
 
 # Données fictives des patients
 patients_data = [
     {
+        "type": "patient",
         "name": "Jean Dupont",
         "birthdate": "29/2/2000",
         "last_visit": "2022-04-01",
-        "health_data": [
-            {
-                "temperature": 37.5,
-                "heartRate": 72,
-                "bloodPressure": "120/80",
-                "weight": 75,
-                "height": 175,
-            }
-        ],
-        "reminders": [
-            {
-                "type": "Medication",
-                "message": "Prendre le médicament XYZ à 8h00 tous les jours.",
-            },
-            {
-                "type": "Appointment",
-                "message": "Rendez-vous avec le médecin le 15/04/2024 à 14h00.",
-            },
-        ],
-        "medications": [
-            {"name": "Médicament XYZ", "dosage": "2 comprimés", "schedule": "Matin"},
-            {"name": "Vaccin ABC", "dosage": "1 dose", "schedule": "20/04/2024"},
-        ],
     },
     {
+        "type": "patient",
         "name": "Marie Martin",
         "birthdate": "29/2/2000",
         "last_visit": "2022-03-28",
-        "health_data": [
-            {
-                "temperature": 37.5,
-                "heartRate": 72,
-                "bloodPressure": "120/80",
-                "weight": 75,
-                "height": 175,
-            }
-        ],
-        "reminders": [
-            {
-                "type": "Medication",
-                "message": "Prendre le médicament XYZ à 8h00 tous les jours.",
-            },
-            {
-                "type": "Appointment",
-                "message": "Rendez-vous avec le médecin le 15/04/2024 à 14h00.",
-            },
-        ],
-        "medications": [
-            {"name": "Médicament XYZ", "dosage": "2 comprimés", "schedule": "Matin"},
-            {"name": "Vaccin ABC", "dosage": "1 dose", "schedule": "20/04/2024"},
-        ],
     },
     {
+        "type": "patient",
         "name": "Pierre Dubois",
         "birthdate": "29/2/2000",
         "last_visit": "2022-03-15",
-        "health_data": [
-            {
-                "temperature": 37.5,
-                "heartRate": 72,
-                "bloodPressure": "120/80",
-                "weight": 75,
-                "height": 175,
-            }
-        ],
-        "reminders": [
-            {
-                "type": "Medication",
-                "message": "Prendre le médicament XYZ à 8h00 tous les jours.",
-            },
-            {
-                "type": "Appointment",
-                "message": "Rendez-vous avec le médecin le 15/04/2024 à 14h00.",
-            },
-        ],
-        "medications": [
-            {"name": "Médicament XYZ", "dosage": "2 comprimés", "schedule": "Matin"},
-            {"name": "Vaccin ABC", "dosage": "1 dose", "schedule": "20/04/2024"},
-        ],
     },
 ]
 
@@ -236,14 +187,28 @@ doctor_inami = [
     },
 ]
 
-
-# Mega sécurisé tqt
-def get_all_users():
-    client = get_client()
-    users_ = client.executeView("users", "users", "all")
-    # print("All users", users_)
-    return list(map(itemgetter("value"), users_))
-
+vaccine_ref = [
+    {
+        "name":"Tétanos", 
+        "frequency": 10, 
+        "doses": [2]
+    }, 
+    {
+        "name":"Diphtérie", 
+        "frequency": 10, 
+        "doses": [2]
+    },
+    {
+        "name":"Coqueluche", 
+        "frequency": 10, 
+        "doses": [2]
+    },
+    {
+        "name":"RRO (Rougeole, Rubéole, Oreillons)", 
+        "frequency": 0, 
+        "dose": [12, 12*7]
+    }
+]
 
 def get_all_patients():
     client = get_client()
@@ -251,6 +216,10 @@ def get_all_patients():
     # print("All patients", patients_)
     return list(map(itemgetter("value"), patients_))
 
+def get_patient_by_id(patient_id):
+    client = get_client()
+    patient = client.getDocument("patients", patient_id)
+    return patient
 
 def get_doctor_notifications():
     client = get_client()
@@ -268,20 +237,34 @@ def get_appointments():
 
 def get_patient_health_data():
     client = get_client()
-    health_data = client.executeView("patients", "patients", "all")
+    health_data = client.executeView("patients", "measure", "all")
     # print("Health data", health_data)
-    return health_data[0]["value"]["health_data"]
+    return health_data[0]["value"]
 
 
-def get_patient_reminders():
-    client = get_client()
-    patient_reminders_ = client.executeView("patients", "patients", "all")
-    # print("Reminders", patient_reminders_)
-    return patient_reminders_[0]["value"]["reminders"]
+# def get_patient_reminders():
+#     client = get_client()
+#     patient_reminders_ = client.executeView("patients", "patients", "all")
+#     # print("Reminders", patient_reminders_)
+#     return patient_reminders_[0]["value"]["reminders"]
 
 
 def get_patient_medications():
     client = get_client()
-    patient_medications_ = client.executeView("patients", "patients", "all")
+    patient_medications_ = client.executeView("patients", "medication", "all")
     # print("Medications", patient_medications_)
-    return patient_medications_[0]["value"]["medications"]
+    return patient_medications_[0]["value"]
+
+
+def add_vaccines(vaccine) -> str:
+    client = get_client()
+    vaccine["type"] = "vaccine"
+    key = client.addDocument("patients", vaccine)
+    return key
+
+def get_patient_vaccines():
+    client = get_client()
+    patient_vaccines_ = client.executeView("patients", "vaccine", "all")
+    # print("Vaccines", patient_vaccines_)
+    return list(map(itemgetter("value"), patient_vaccines_))
+
