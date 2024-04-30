@@ -18,6 +18,6 @@ app.register_blueprint(api_data)
 app.register_blueprint(api_auth)
 
 if __name__ == '__main__':
-    # make_default_db()
+    make_default_db()
     
     app.run(debug=True)

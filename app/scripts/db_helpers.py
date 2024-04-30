@@ -8,112 +8,28 @@ from rich import print
 from scripts.CouchDBClient import CouchDBClient
 
 _client = None
-
-
-def get_client():
-    global _client
-    if _client is None:
-        _client = CouchDBClient()
-    return _client
-
-
-def make_default_db():
-    client = get_client()
-    # if not 'users' in client.listDatabases():
-    create_fictive_data()
-    make_all_view()
-
-
-def create_fictive_data():
-    client = get_client()
-
-    client.reset()
-
-    # Créer les patients fictifs
-    client.createDatabase("patients")
-    for patient in patients_data:
-        client.addDocument("patients", patient)
-        
-    for health_record in health_records:
-        health_record["type"] = "measure"
-        client.addDocument("patients", health_record)
-        
-    for medication in posologie:
-        medication["type"] = "medication"
-        client.addDocument("patients", medication)
-
-    # Créer les notifications fictives pour le médecin
-    client.createDatabase("doctor")
-    for doctor in doctor_inami:
-        client.addDocument("doctor", doctor)
-    
-    # Add data of reference -> vaccines
-    client.createDatabase("vaccine-references")
-    for vaccine in vaccine_ref:
-        client.addDocument("vaccine-references", vaccine)
-
-
-def make_all_view():
-    client = get_client()
-
-    # Créer la vue pour les patients
-    client.installView(
-        "patients", "patients", "all",
-        "function(doc) { if (doc.type === 'patient') { emit(doc._id, doc); }}"
-        
-    )
-    
-    # Créer un vue pour patient par email
-    client.installView(
-        "patients", "patients", "by_email",
-        "function(doc) { if (doc.type === 'patient') { emit(doc.email, doc); }}"
-    )
-    
-    # Créer la vue pour les données de santé des patients
-    client.installView(
-        "patients", "measure", "all",
-        "function(doc) { if (doc.type === 'measure') { emit(doc._id, doc); }}"
-    )
-    
-    # Créer la vue pour les médicaments des patients
-    client.installView(
-        "patients", "medication", "all",
-        "function(doc) { if (doc.type === 'medication') { emit(doc._id, doc); }}"
-    )
-    
-    # Créer la vue pour les vaccins des patients
-    client.installView(
-        "patients", "vaccine", "all",
-        "function(doc) { if (doc.type === 'vaccine') { emit(doc._id, doc); }}"
-    )
-
-    client.installView(
-        "patients", "vaccine", "by_patient_id",
-        "function(doc) { if (doc.type === 'vaccine') { emit(doc.patient_id, doc); }}"
-    )
-
-    # Créer la vue pour les médecins
-    client.installView(
-        "doctor",
-        "doctor",
-        "all",
-        "function(doc) { emit(doc._id, doc); }"
-    )
-    
-    client.installView(
-        "doctor",
-        "doctor",
-        "by_email",
-        "function(doc) { emit(doc.email, doc); }"
-    )
-    
-    # Créer la vue pour les références des vaccins
-    client.installView(
-        "vaccine-references",
-        "vaccine-references",
-        "all",
-        "function(doc) { emit(doc._id, doc); }"
-    )
+_vaccine_ref = [
+    {
+        "name":"Tétanos", 
+        "frequency": 10, 
+        "doses": [2]
+    }, 
+    {
+        "name":"Diphtérie", 
+        "frequency": 10, 
+        "doses": [2]
+    },
+    {
+        "name":"Coqueluche", 
+        "frequency": 10, 
+        "doses": [2]
+    },
+    {
+        "name":"RRO (Rougeole, Rubéole, Oreillons)", 
+        "frequency": 0, 
+        "dose": [12, 12*7]
+    }
+]
 
 
 health_records = [
@@ -126,6 +42,7 @@ health_records = [
         "height": 175,
     }
 ]
+
 
 posologie = [
     {
@@ -158,7 +75,6 @@ patients_data = [
     },
 ]
 
-
 # Données fictives pour le médecin
 doctor_inami = [
     {
@@ -170,33 +86,134 @@ doctor_inami = [
     },
 ]
 
-vaccine_ref = [
-    {
-        "name":"Tétanos", 
-        "frequency": 10, 
-        "doses": [2]
-    }, 
-    {
-        "name":"Diphtérie", 
-        "frequency": 10, 
-        "doses": [2]
-    },
-    {
-        "name":"Coqueluche", 
-        "frequency": 10, 
-        "doses": [2]
-    },
-    {
-        "name":"RRO (Rougeole, Rubéole, Oreillons)", 
-        "frequency": 0, 
-        "dose": [12, 12*7]
-    }
-]
+
+
+def get_client():
+    global _client
+    if _client is None:
+        _client = CouchDBClient()
+    return _client
+
+
+def make_default_db():
+    client = get_client()
+    client.reset()
+    # if not 'users' in client.listDatabases():
+    create_dbs(client)
+    populate_vaccine_references(client)
+    # create_fictive_data(client)
+
+    make_all_view(client)
+
+
+def create_dbs(client):
+    """
+    Creates the 3 databases used in this app:
+        * patients
+        * doctor
+        * vaccine-references
+    """
+    client = get_client()
+    client.createDatabase("patients")
+    client.createDatabase("doctor")
+    client.createDatabase("vaccine-references")
+
+def populate_vaccine_references(client):
+    """Add vaccine-references data into the corresponding database"""
+    for vaccine in _vaccine_ref:
+        client.addDocument("vaccine-references", vaccine)
+
+def create_fictive_data(client):
+    """Add fictive data about patients, doctor and measures"""
+    # Créer les patients fictifs
+    for patient in patients_data:
+        client.addDocument("patients", patient)
+        
+    for health_record in health_records:
+        health_record["type"] = "measure"
+        client.addDocument("patients", health_record)
+        
+    for medication in posologie:
+        medication["type"] = "medication"
+        client.addDocument("patients", medication)
+
+    # Créer les notifications fictives pour le médecin
+    for doctor in doctor_inami:
+        client.addDocument("doctor", doctor)
+
+def make_all_view(client):
+    """Add all views to the db that retrieve all ...
+        * patient json
+        * emails of each patients
+        * measure json 
+        * medication json
+        * vaccine json
+        * ...
+    """
+    # Créer la vue pour les patients
+    client.installView(
+        "patients", "patients", "all",
+        "function(doc) { if (doc.type === 'patient') { emit(doc._id, doc); }}"
+    )
+    
+    # Créer un vue pour patient par email
+    client.installView(
+        "patients", "patients", "by_email",
+        "function(doc) { if (doc.type === 'patient') { emit(doc.email, doc); }}"
+    )
+    
+    # Créer la vue pour les données de santé des patients
+    client.installView(
+        "patients", "measure", "all",
+        "function(doc) { if (doc.type === 'measure') { emit(doc._id, doc); }}"
+    )
+    
+    # Créer la vue pour les médicaments des patients
+    client.installView(
+        "patients", "medication", "all",
+        "function(doc) { if (doc.type === 'medication') { emit(doc._id, doc); }}"
+    )
+    
+    # Créer la vue pour les vaccins des patients
+    client.installView(
+        "patients", "vaccine", "all",
+        "function(doc) { if (doc.type === 'vaccine') { emit(doc._id, doc); }}"
+    )
+    
+    # Créer la vue pour les vaccins des patients (trié par patient_id)
+    client.installView(
+        "patients", "vaccine", "by_patient_id",
+        "function(doc) { if (doc.type === 'vaccine') { emit(doc.patient_id, doc); }}"
+    )
+
+    # Créer la vue pour les médecins
+    client.installView(
+        "doctor",
+        "doctor",
+        "all",
+        "function(doc) { emit(doc._id, doc); }"
+    )
+    
+    client.installView(
+        "doctor",
+        "doctor",
+        "by_email",
+        "function(doc) { emit(doc.email, doc); }"
+    )
+    
+    # Créer la vue pour les références des vaccins
+    client.installView(
+        "vaccine-references",
+        "vaccine-references",
+        "all",
+        "function(doc) { emit(doc._id, doc); }"
+    )
 
 def get_all_patients():
     client = get_client()
     patients_ = client.executeView("patients", "patients", "all")
     # print("All patients", patients_)
+    # TODO manage empty case ?
     return list(map(itemgetter("value"), patients_))
 
 def get_patient_by_id(patient_id):
@@ -208,21 +225,25 @@ def get_doctor_notifications():
     client = get_client()
     doctors = client.executeView("doctor", "doctor", "all")
     # print("Notifications", doctors)
+    # TODO manage empty case ?
     return doctors[0]["value"]["notifications"]
-
 
 def get_appointments():
     client = get_client()
     appointments = client.executeView("doctor", "doctor", "all")
     # print("Appointments", appointments)
+    # TODO manage empty case ?
     return appointments[0]["value"]["appointments"]
-
 
 def get_patient_health_data():
     client = get_client()
     health_data_ = client.executeView("patients", "measure", "all")
-    # print("Health data", health_data)
-    return health_data_[0]["value"]
+    # print("Health data", health_data_)
+
+    if health_data_:
+        return health_data_[0]["value"]
+    else:
+        return None 
 
 
 # def get_patient_reminders():
