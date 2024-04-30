@@ -32,7 +32,11 @@ window.onload = () => {
             })
             .catch((error) => {
                 console.log(error);
-                alert("An error occurred. Please try again later.")
+                if (error.response.status === 401 && error.response.data.error === 'Invalid credentials') {
+                    alert('Invalid email or password. Have you registered?.');
+                } else {
+                    alert("An error occurred. Please try again later.");
+                }
             });
     });
 };
