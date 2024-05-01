@@ -1,0 +1,10 @@
+[
+    {
+        "type": "measure",
+        "temperature": 37.5,
+        "heartRate": 72,
+        "bloodPressure": "120/80",
+        "weight": 75,
+        "height": 175
+    }
+]

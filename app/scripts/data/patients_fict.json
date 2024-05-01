@@ -1,0 +1,20 @@
+[
+    {
+        "type": "patient",
+        "name": "Jean Dupont",
+        "birthdate": "29/2/2000",
+        "last_visit": "2022-04-01"
+    },
+    {
+        "type": "patient",
+        "name": "Marie Martin",
+        "birthdate": "29/2/2000",
+        "last_visit": "2022-03-28"
+    },
+    {
+        "type": "patient",
+        "name": "Pierre Dubois",
+        "birthdate": "29/2/2000",
+        "last_visit": "2022-03-15"
+    }
+]

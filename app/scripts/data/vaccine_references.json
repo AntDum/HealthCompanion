@@ -1,0 +1,22 @@
+[
+    {
+        "name":"Tétanos", 
+        "frequency": 10, 
+        "doses": [2]
+    }, 
+    {
+        "name":"Diphtérie", 
+        "frequency": 10, 
+        "doses": [2]
+    },
+    {
+        "name":"Coqueluche", 
+        "frequency": 10, 
+        "doses": [2]
+    },
+    {
+        "name":"RRO (Rougeole, Rubéole, Oreillons)", 
+        "frequency": 0, 
+        "dose": [12, 84]
+    }
+]

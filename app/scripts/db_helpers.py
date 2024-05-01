@@ -6,87 +6,11 @@ from operator import itemgetter
 
 from rich import print
 from scripts.CouchDBClient import CouchDBClient
+import json
+import os
 
 _client = None
-_vaccine_ref = [
-    {
-        "name":"Tétanos", 
-        "frequency": 10, 
-        "doses": [2]
-    }, 
-    {
-        "name":"Diphtérie", 
-        "frequency": 10, 
-        "doses": [2]
-    },
-    {
-        "name":"Coqueluche", 
-        "frequency": 10, 
-        "doses": [2]
-    },
-    {
-        "name":"RRO (Rougeole, Rubéole, Oreillons)", 
-        "frequency": 0, 
-        "dose": [12, 12*7]
-    }
-]
-
-
-health_records = [
-    {
-        "type": "measure",
-        "temperature": 37.5,
-        "heartRate": 72,
-        "bloodPressure": "120/80",
-        "weight": 75,
-        "height": 175,
-    }
-]
-
-
-posologie = [
-    {
-        "type": "medication",
-        "name": "Médicament XYZ",
-        "dosage": "2 comprimés",
-        "schedule": "Matin",
-    },
-]
-
-# Données fictives des patients
-patients_data = [
-    {
-        "type": "patient",
-        "name": "Jean Dupont",
-        "birthdate": "29/2/2000",
-        "last_visit": "2022-04-01",
-    },
-    {
-        "type": "patient",
-        "name": "Marie Martin",
-        "birthdate": "29/2/2000",
-        "last_visit": "2022-03-28",
-    },
-    {
-        "type": "patient",
-        "name": "Pierre Dubois",
-        "birthdate": "29/2/2000",
-        "last_visit": "2022-03-15",
-    },
-]
-
-# Données fictives pour le médecin
-doctor_inami = [
-    {
-        # "inami": "123456",
-        "name": "Dr. Dupont",
-        "birthdate": "29/2/2000",
-        "email": "contact@nop.com",
-        "password": "123456",
-    },
-]
-
-
+current_dir = os.path.dirname(__file__)
 
 def get_client():
     global _client
@@ -101,7 +25,7 @@ def make_default_db():
     # if not 'users' in client.listDatabases():
     create_dbs(client)
     populate_vaccine_references(client)
-    # create_fictive_data(client)
+    create_fictive_data(client)
 
     make_all_view(client)
 
@@ -120,23 +44,43 @@ def create_dbs(client):
 
 def populate_vaccine_references(client):
     """Add vaccine-references data into the corresponding database"""
-    for vaccine in _vaccine_ref:
+    vaccine_refenrences_file_path = os.path.join(current_dir, 'data', 'vaccine_references.json')
+
+    with open(vaccine_refenrences_file_path, 'r') as file:
+        vaccine_data = json.load(file)
+
+    for vaccine in vaccine_data:
         client.addDocument("vaccine-references", vaccine)
 
 def create_fictive_data(client):
     """Add fictive data about patients, doctor and measures"""
     # Créer les patients fictifs
+    with open(os.path.join(current_dir, 'data', 'patients_fict.json'), 'r') as file:
+        patients_data = json.load(file)
+
     for patient in patients_data:
         client.addDocument("patients", patient)
+        
+    # Health Records
+    with open(os.path.join(current_dir, 'data', 'HR_fict.json'), 'r') as file:
+        health_records = json.load(file)
         
     for health_record in health_records:
         health_record["type"] = "measure"
         client.addDocument("patients", health_record)
         
+    # Posologie
+    with open(os.path.join(current_dir, 'data', 'posologie_fict.json'), 'r') as file:
+        posologie = json.load(file)
+        
     for medication in posologie:
         medication["type"] = "medication"
         client.addDocument("patients", medication)
-
+    
+    # Doctors
+    with open(os.path.join(current_dir, 'data', 'doctor_fict.json'), 'r') as file:
+        doctor_inami = json.load(file)
+        
     # Créer les notifications fictives pour le médecin
     for doctor in doctor_inami:
         client.addDocument("doctor", doctor)
