@@ -59,6 +59,11 @@
                 {% endif %}
             </div>
         </nav>
+        <div class="navbar navbar-expand-lg navbar-dark bg-primary fixed-bottom">
+            <div class="container">
+                <span class="navbar-text">Developped by Antoine D., Béatrice L., Julian B., Linda E. @Uclouvain 2024</span>
+            </div>
+        </div>
         <div class="container">{% block content %}{% endblock %}</div>
         <script src="{{ url_for('static', filename='js/axios.min.js') }}"></script>
         <script src="{{ url_for('static', filename='js/chart.js') }}"></script>
