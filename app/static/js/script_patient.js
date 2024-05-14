@@ -26,14 +26,14 @@ function fetchHealthData() {
 // Fonction pour récupérer et afficher les rappels et notifications du patient depuis le backend
 function fetchReminders() {
     axios
-        .get("/api/patients/reminders") // Assurez-vous que cette route existe dans votre backend
+        .get("/api/patients/vaccine_reminders") // Assurez-vous que cette route existe dans votre backend
         .then(function (response) {
             const reminders = response.data;
             const remindersElement = document.getElementById("reminders");
             remindersElement.innerHTML = reminders
                 .map(
                     (reminder) =>
-                        `<li class="list-group-item">${reminder.type}: ${reminder.message}</li>`
+                        `<li class="list-group-item">${reminder.name}: ${reminder.due_date}</li>`
                 )
                 .join("");
         })
@@ -60,5 +60,5 @@ document.getElementById("communication-form").addEventListener("submit", functio
 // Chargement initial des données du dashboard patient
 window.onload = function () {
     fetchHealthData();
-    // fetchReminders();
+    fetchReminders();
 };

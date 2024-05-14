@@ -6,7 +6,9 @@ import json
 import os
 from operator import itemgetter
 from pathlib import Path
+from typing import Optional
 
+from dateutil.relativedelta import relativedelta
 from rich import print
 from scripts.CouchDBClient import CouchDBClient
 
@@ -147,6 +149,14 @@ def make_all_view(client):
         "by_patient_id",
         "function(doc) { if (doc.type === 'vaccine') { emit(doc.patient_id, doc); }}",
     )
+    
+    # Créer la vue pour les rappels des vaccins des patients
+    client.installView(
+        "patients",
+        "vaccine_reminders",
+        "by_patient_id",
+        "function(doc) { if (doc.type === 'vaccine_reminders') { emit(doc.patient_id, doc); }}",
+    )
 
     # Créer la vue pour les médecins
     client.installView(
@@ -162,7 +172,7 @@ def make_all_view(client):
         "vaccine-references",
         "vaccine-references",
         "all",
-        "function(doc) { emit(doc._id, doc); }",
+        "function(doc) { emit(doc.name, doc); }",
     )
 
 
@@ -210,18 +220,11 @@ def get_patient_health_data() -> dict:
         return {}
 
 
-# def get_patient_reminders():
-#     client = get_client()
-#     patient_reminders_ = client.executeView("patients", "patients", "all")
-#     # print("Reminders", patient_reminders_)
-#     return patient_reminders_[0]["value"]["reminders"]
-
-
-# def get_patient_medications():
-#     client = get_client()
-#     patient_medications_ = client.
-#     # print("Medications", patient_medications_)
-#     return patient_medications_[0]["value"]
+def add_vaccines_reminders(vaccine) -> str:
+    client = get_client()
+    vaccine["type"] = "vaccine_reminders"
+    key = client.addDocument("patients", vaccine)
+    return key
 
 
 def add_vaccines(vaccine) -> str:
@@ -241,6 +244,15 @@ def get_patient_vaccines(patient_id=None) -> list:
         return []
     return list(map(itemgetter("value"), patient_vaccines_))
 
+def get_patient_vaccine_reminders(patient_id=None) -> list:
+    client = get_client()
+    patient_vaccine_reminders_ = client.executeView(
+        "patients", "vaccine_reminders", "by_patient_id", key=patient_id
+    )
+    # print("Vaccine reminders", patient_vaccine_reminders_)
+    if len(patient_vaccine_reminders_) == 0:
+        return []
+    return list(map(itemgetter("value"), patient_vaccine_reminders_))
 
 def get_all_vaccines_ref() -> list:
     client = get_client()
@@ -250,6 +262,16 @@ def get_all_vaccines_ref() -> list:
         return []
     return list(map(itemgetter("value"), vaccines))
 
+
+def get_frequency_of_vaccine(vaccine_name) -> Optional[relativedelta]:
+    client = get_client()
+    vaccines = client.executeView(
+        "vaccine-references", "vaccine-references", "all", key=vaccine_name
+    )
+    if len(vaccines) == 0:
+        return None
+    return relativedelta(years=vaccines[0]["value"]["frequency"])
+    
 
 # ========================================================
 
