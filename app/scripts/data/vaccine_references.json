@@ -3,56 +3,42 @@
         "vaccines_name":"Triaxis", 
         "against": ["Diphtérie", "Tétanos",  "Coqueluche"],
         "mandatory": {"Belgique": true}, 
-        "first_dose_recommandation": -1,
-        "periodicity": 10,
         "free": true
     },
     {
         "vaccines_name":"Grippe saisonnière", 
         "against": ["Grippe saisonnière"],
         "mandatory": {"Belgique": false}, 
-        "first_dose_recommandation": -1,
-        "periodicity": 1,
         "free": null
     },
     {
         "vaccines_name":"M.M.R VaxPro", 
         "against": ["Oreillons", "Rougeole",  "Rubéole"],
         "mandatory": {"Belgique": true}, 
-        "first_dose_recommandation": -1,
-        "periodicity": -1,
         "free": true
     },
     {
         "vaccines_name":"Covid-19", 
         "against": ["Covid-19"],
         "mandatory": {"Belgique": false}, 
-        "first_dose_recommandation": -1,
-        "periodicity": -1,
         "free": null
     },
     {
         "vaccines_name":"Poliomyélite", 
         "against": ["Poliomyélite"],
         "mandatory": {"Belgique": false}, 
-        "first_dose_recommandation": -1,
-        "periodicity": -1,
         "free": null
     },
     {
         "vaccines_name":"Papillomavirus", 
         "against": ["Poliomyélite"],
         "mandatory": {"Belgique": false}, 
-        "first_dose_recommandation": -1,
-        "periodicity": -1,
         "free": null
     },
     {
         "vaccines_name":"Varicelle", 
         "against": ["Varicelle"],
         "mandatory": {"Belgique": false}, 
-        "first_dose_recommandation": -1,
-        "periodicity": -1,
         "free": null
     }
 ]

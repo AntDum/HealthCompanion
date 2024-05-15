@@ -223,6 +223,7 @@ def get_patient_health_data() -> dict:
 def add_vaccines_reminders(vaccine) -> str:
     client = get_client()
     vaccine["type"] = "vaccine_reminders"
+    vaccine["is-done"] = False
     key = client.addDocument("patients", vaccine)
     return key
 
@@ -257,11 +258,15 @@ def get_patient_vaccine_reminders(patient_id=None) -> list:
 def get_all_vaccines_ref() -> list:
     client = get_client()
     vaccines = client.executeView("vaccine-references", "vaccine-references", "all")
-    print("Vaccines", vaccines)
+    # print("Vaccines", vaccines)
     if len(vaccines) == 0:
         return []
     return list(map(itemgetter("value"), vaccines))
 
+def add_vaccine_ref(vaccine) -> str:
+    client = get_client()
+    key = client.addDocument("vaccine-references", vaccine)
+    return key
 
 def get_frequency_of_vaccine(vaccine_name) -> Optional[relativedelta]:
     client = get_client()

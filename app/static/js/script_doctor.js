@@ -1,34 +1,6 @@
 // script_doctor.js
 // Code JavaScript pour le dashboard doctor
 
-// Récupérer la liste des patients
-function fetchPatient() {
-    axios
-        .get("/api/patients")
-        .then(function (response) {
-            // const patientListElement = document.getElementById("patient-list");
-            // patientListElement.innerHTML = "";
-            // response.data.forEach(function (patient) {
-            //     const listItem = document.createElement("li");
-            //     listItem.textContent = `Nom: ${patient.name} | Date de naissance: ${patient.birthdate} | Dernière consultation: ${patient.last_visit}`;
-            //     patientListElement.appendChild(listItem);
-            // });
-
-            const patientSelectElement = document.getElementById("patient-select");
-            patientSelectElement.innerHTML = "";
-            patientSelectElement.appendChild(new Option("Sélectionnez un patient", ""));
-            response.data.forEach(function (patient) {
-                const option = document.createElement("option");
-                option.value = patient.id;
-                option.textContent = patient.name;
-                patientSelectElement.appendChild(option);
-            });
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-}
-
 // Récupérer les rappels et notifications pour le médecin
 function fetchNotification() {
     axios
@@ -61,23 +33,6 @@ function fetchAppointments() {
         .catch(function (error) {
             console.log(error);
         });
-}
-
-function fetchVaccinesRef() {
-    axios
-    .get("/api/vaccine/ref")
-    .then(function (response) {
-        console.log(response)
-        const vaccineSelectElement = document.getElementById("vaccine-name");
-        vaccineSelectElement.innerHTML = "";
-        vaccineSelectElement.appendChild(new Option("Sélectionnez un vaccin", ""));
-        response.data.forEach(function (vaccine) {
-            const option = document.createElement("option");
-            option.value = vaccine.vaccines_names;
-            option.textContent = vaccine.vaccines_names;
-            vaccineSelectElement.appendChild(option);
-        });
-    })
 }
 
 // Écouteur d'événement pour soumettre le formulaire de communication avec le médecin

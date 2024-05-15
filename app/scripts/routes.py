@@ -30,7 +30,7 @@ def index():
         if session["role"] == "patient":
             return redirect(url_for("routes.patient_dashboard"))
         elif session["role"] == "doctor":
-            return redirect(url_for("routes.doctor_dashboard"))
+            return redirect(url_for("routes.doctor_vaccination"))
     return render_template("login.html")
 
 
@@ -52,6 +52,11 @@ def doctor_vaccination():
         return redirect(url_for("routes.index"))
     return render_template("doctor_vaccination.html")
 
+@routes.route("/doctor/vaccination_ref")
+def doctor_vaccination_ref():
+    if not is_doctor():
+        return redirect(url_for("routes.index"))
+    return render_template("vaccine_references.html")
 
 @routes.route("/dashboard/patient")
 def patient_dashboard():

@@ -1,6 +1,6 @@
 <!-- patient_dashboard.html -->
 {% extends 'layout.html' %} {% block content %}
-<div class="container">
+<div class="container mt-4">
     <h3>Ajout vaccin</h3>
     <form id="vaccine-form">
         <div class="form-group">
@@ -9,19 +9,49 @@
         </div>
         <div class="form-group">
             <label for="vaccine-name">Nom du vaccin:</label>
-            <select class="form-control" id="vaccine-name">
-                <option>Diphtérie</option>
-                <option>Tétanos</option>
-                <option>Coqueluche</option>
-                <option>Poliomyélite</option>
+            <select class="form-control select-vaccines" id="vaccine-name">
             </select>
         </div>
         <div class="form-group">
             <label for="patient-select">Nom du patient:</label>
             <select class="form-control" id="patient-select"></select>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="button submit" class="btn btn-primary"  data-toggle="modal">Submit</button>
     </form>
 </div>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="modalReminderCenter" tabindex="-1" role="dialog" aria-labelledby="modalReminderCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalReminderLongTitle">Ajouter un rappel pour une nouvelle dose à <span id="patient-name-modal">Patient name</span>?</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form id="vaccine-reminder-form">
+                <div class="form-group">
+                    <label for="vaccine-reminder-date">Date de la prochaine vaccination:</label>
+                    <input type="date" class="form-control" id="vaccine-reminder-date" />
+                </div>
+                <div class="form-group">
+                    <label for="vaccine-name-modal">Nom du vaccin:</label>
+                    <select class="form-control select-vaccines" id="vaccine-name-modal">
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+            </form>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Non merci</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script src="{{ url_for('static', filename='js/api_interface_doctor.js') }}"></script>
 <script src="{{ url_for('static', filename='js/vaccination_doctor.js') }}"></script>
 {% endblock %}

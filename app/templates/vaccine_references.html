@@ -1,0 +1,178 @@
+<!-- ???.html -->
+{% extends 'layout.html' %} {% block content %}
+
+<div class="container">
+    <!-- FORMS -->
+    <!-- Button trigger modal -->
+    <button
+        type="button"
+        class="btn btn-primary mt-2"
+        data-toggle="modal"
+        data-target="#exampleModalCenter"
+    >
+        Ajouter un vaccin à la bibliothèque.
+    </button>
+
+    <!-- Modal -->
+    <div
+        class="modal fade"
+        id="exampleModalCenter"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true"
+    >
+        <div class="modal-dialog modal-dialog-centered" role="document">
+
+            <div class="modal-content ">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Ajout d'un vaccin à la bibliothèque:</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <form id="vaccine-references-form">
+                        <div class="form-group">
+                            <label>Nom du vaccin:</label>
+                            <input
+                                class="form-control"
+                                type="text"
+                                placeholder="Nom du vaccin"
+                                id="vaccine-name"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label>Maladies ciblées:</label>
+                            <input
+                                class="form-control"
+                                type="text"
+                                placeholder="Maladie1, Maladie2"
+                                id="against"
+                            />
+                            <p>
+                                Merci de séparer les noms des maladies par une virgule. (Dans le
+                                cas où le vaccin protège le patient de plusieurs maladies)
+                            </p>
+                        </div>
+
+                        <label>Ce vaccin est-il obligatoire en Belgique?</label>
+                        <div class="form-check" id="free">
+                            <input
+                                class="form-check-input"
+                                type="radio"
+                                name="vaccineMandatory"
+                                id="vaccineMandatoryYes"
+                                value="true"
+                            />
+                            <label class="form-check-label" for="flexRadioDefault1">
+                                Oui
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input
+                                class="form-check-input"
+                                type="radio"
+                                name="vaccineMandatory"
+                                id="vaccineMandatoryNo"
+                                value="false"
+                                checked
+                            />
+                            <label class="form-check-label" for="flexRadioDefault2">
+                                Non
+                            </label>
+                        </div>
+                        <label>Ce vaccin est-il gratuit en Belgique?</label>
+                        <div class="form-check" id="mandatory">
+                            <input
+                                class="form-check-input"
+                                type="radio"
+                                name="vaccineFree"
+                                id="vaccineFreeYes"
+                                value="true"
+                            />
+                            <label class="form-check-label" for="flexRadioDefault1">
+                                Oui
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input
+                                class="form-check-input"
+                                type="radio"
+                                name="vaccineFree"
+                                id="vaccineFreeNo"
+                                value="false"
+                                checked
+                            />
+                            <label class="form-check-label" for="flexRadioDefault2">
+                                Non
+                            </label>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    Fermer
+                </button>
+                <button
+                type="button submit"
+                class="btn btn-primary"
+                data-toggle="modal"
+                id="add-vaccine-ref-btn"
+            >
+                Ajouter
+            </button>
+            </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- TABLES -->
+
+    <div>
+        <h2 class="mt-4">Bibliothèque de vaccins de HealthCompanion</h2>
+        <p>
+            Cette table reprend les données des vaccins disponibles dans HealthCompanion relatives à
+            la Belgique.
+        </p>
+    </div>
+
+    <table class="table table-hover table-sm" id="table-ref">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nom du vaccin</th>
+                <th scope="col">Maladies</th>
+                <th scope="col">Obligatoire?</th>
+                <th scope="col">Gratuit?</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <hr>
+    
+
+
+    <h4 class="mt4">Sources</h4>
+    <ul>
+        <li>
+            <a
+                href="https://www.aviq.be/sites/default/files/documents_pro/2023-10/Guide%20Vaccination%20adulte.pdf"
+                ><i>Guide de vaccination chez l'adulte en région wallonne</i></a
+            >
+        </li>
+        <li>
+            <a
+                href="https://www.vaccination-info.be/wp-content/uploads/2023/08/vaccination_15-16_ans.pdf"
+                ><i>À chaque âge sa vaccination! La vaccination à 15-16 ans</i></a
+            >
+        </li>
+    </ul>
+</div>
+<script src="{{ url_for('static', filename='js/api_interface_doctor.js') }}"></script>
+<script src="{{ url_for('static', filename='js/vaccination_doctor_ref.js') }}"></script>
+{% endblock %}

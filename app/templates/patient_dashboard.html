@@ -6,19 +6,23 @@
     <h2 class="mb-4">Tableau de Bord Patient</h2>
     <div class="row">
         <div class="col-md-6">
-            <h3>Données de Santé</h3>
+            <h3>Vaccinations</h3>
             <div class="card mb-4" id="health-data">
                 <!-- Les données de santé seront affichées ici -->
+                <ul class="list-group list-group-flush" id="vaccines">
+                    <!-- Les médicaments et vaccinations seront affichés ici -->
+                </ul>
             </div>
+           
+        </div>
+        <div class="col-md-6">
             <h3>Rappels de vaccination</h3>
             <div class="card mb-4">
                 <ul class="list-group list-group-flush" id="reminders">
                     <!-- Les rappels et notifications seront affichés ici -->
                 </ul>
             </div>
-        </div>
-        <div class="col-md-6">
-            <h3>Communication avec le Médecin</h3>
+            <!-- <h3>Communication avec le Médecin</h3>
             <form id="communication-form">
                 <div class="form-group">
                     <label for="message">Message :</label>
@@ -27,8 +31,8 @@
                 <button type="submit" class="btn btn-primary">Envoyer</button>
             </form>
             <div class="card mb-4" id="doctor-messages">
-                <!-- Les messages du médecin seront affichés ici -->
-            </div>
+                Les messages du médecin seront affichés ici
+            </div> -->
         </div>
     </div>
     <!-- <div class="row">
@@ -42,5 +46,6 @@
         </div>
     </div> -->
 </div>
+<script src="{{ url_for('static', filename='js/vaccination_patient.js') }}"></script>
 <script src="{{ url_for('static', filename='js/script_patient.js') }}"></script>
 {% endblock %}

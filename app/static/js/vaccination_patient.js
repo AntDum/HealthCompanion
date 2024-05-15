@@ -21,8 +21,3 @@ function fetchVaccines() {
         });
 }
 
-
-// Chargement initial des données du dashboard patient
-window.onload = function () {
-    fetchVaccines();
-};
