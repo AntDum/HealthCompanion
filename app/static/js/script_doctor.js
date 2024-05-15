@@ -73,8 +73,8 @@ function fetchVaccinesRef() {
         vaccineSelectElement.appendChild(new Option("Sélectionnez un vaccin", ""));
         response.data.forEach(function (vaccine) {
             const option = document.createElement("option");
-            option.value = vaccine.name;
-            option.textContent = vaccine.name;
+            option.value = vaccine.vaccines_names;
+            option.textContent = vaccine.vaccines_names;
             vaccineSelectElement.appendChild(option);
         });
     })

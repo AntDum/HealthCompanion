@@ -24,14 +24,15 @@ function fetchVaccinesRef() {
     axios
     .get("/api/vaccine/ref")
     .then(function (response) {
-        console.log(response)
+        console.log("response: ", response.data)
         const vaccineSelectElement = document.getElementById("vaccine-name");
         vaccineSelectElement.innerHTML = "";
         vaccineSelectElement.appendChild(new Option("Sélectionnez un vaccin", ""));
         response.data.forEach(function (vaccine) {
+            console.log("vaccine", vaccine);
             const option = document.createElement("option");
-            option.value = vaccine.name;
-            option.textContent = vaccine.name;
+            option.value = vaccine.against;
+            option.textContent = vaccine.against;
             vaccineSelectElement.appendChild(option);
         });
     })

@@ -172,7 +172,7 @@ def make_all_view(client):
         "vaccine-references",
         "vaccine-references",
         "all",
-        "function(doc) { emit(doc.name, doc); }",
+        "function(doc) { emit(doc.vaccines_name, doc); }",
     )
 
 
@@ -197,7 +197,7 @@ def get_doctor_notifications() -> list:
     # print("Notifications", doctors)
     if len(doctors) == 0:
         return []
-    return doctors[0]["value"]["notifications"]
+    return # doctors[0]["value"]["notifications"]
 
 
 def get_appointments() -> list:
@@ -257,7 +257,7 @@ def get_patient_vaccine_reminders(patient_id=None) -> list:
 def get_all_vaccines_ref() -> list:
     client = get_client()
     vaccines = client.executeView("vaccine-references", "vaccine-references", "all")
-    # print("Vaccines", vaccines)
+    print("Vaccines", vaccines)
     if len(vaccines) == 0:
         return []
     return list(map(itemgetter("value"), vaccines))
