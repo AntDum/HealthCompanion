@@ -6,11 +6,11 @@
     <!-- Button trigger modal -->
     <button
         type="button"
-        class="btn btn-primary mt-2"
+        class="btn btn-primary mt-3"
         data-toggle="modal"
         data-target="#exampleModalCenter"
     >
-        Ajouter un vaccin à la bibliothèque.
+        Ajouter un vaccin à la bibliothèque
     </button>
 
     <!-- Modal -->
@@ -22,111 +22,113 @@
         aria-labelledby="exampleModalCenterTitle"
         aria-hidden="true"
     >
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-dialog-centered" style="min-width: 800px" role="document">
+            <div class="modal-content modal-lg">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">
+                        Ajout d'un vaccin à la bibliothèque:
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <form id="vaccine-references-form">
+                            <div class="form-group">
+                                <label>Nom du vaccin:</label>
+                                <input
+                                    class="form-control"
+                                    type="text"
+                                    placeholder="Nom du vaccin"
+                                    id="vaccine-name"
+                                />
+                            </div>
+                            <div class="form-group">
+                                <label>Maladies ciblées:</label>
+                                <input
+                                    class="form-control"
+                                    type="text"
+                                    placeholder="Maladie1, Maladie2"
+                                    id="against"
+                                />
+                                <p>
+                                    Merci de séparer les noms des maladies par une virgule.
+                                    <br />
+                                    (Dans le cas où le vaccin protège le patient de plusieurs
+                                    maladies)
+                                </p>
+                            </div>
 
-            <div class="modal-content ">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Ajout d'un vaccin à la bibliothèque:</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="container">
-                    <form id="vaccine-references-form">
-                        <div class="form-group">
-                            <label>Nom du vaccin:</label>
-                            <input
-                                class="form-control"
-                                type="text"
-                                placeholder="Nom du vaccin"
-                                id="vaccine-name"
-                            />
-                        </div>
-                        <div class="form-group">
-                            <label>Maladies ciblées:</label>
-                            <input
-                                class="form-control"
-                                type="text"
-                                placeholder="Maladie1, Maladie2"
-                                id="against"
-                            />
-                            <p>
-                                Merci de séparer les noms des maladies par une virgule. (Dans le
-                                cas où le vaccin protège le patient de plusieurs maladies)
-                            </p>
-                        </div>
-
-                        <label>Ce vaccin est-il obligatoire en Belgique?</label>
-                        <div class="form-check" id="free">
-                            <input
-                                class="form-check-input"
-                                type="radio"
-                                name="vaccineMandatory"
-                                id="vaccineMandatoryYes"
-                                value="true"
-                            />
-                            <label class="form-check-label" for="flexRadioDefault1">
-                                Oui
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input
-                                class="form-check-input"
-                                type="radio"
-                                name="vaccineMandatory"
-                                id="vaccineMandatoryNo"
-                                value="false"
-                                checked
-                            />
-                            <label class="form-check-label" for="flexRadioDefault2">
-                                Non
-                            </label>
-                        </div>
-                        <label>Ce vaccin est-il gratuit en Belgique?</label>
-                        <div class="form-check" id="mandatory">
-                            <input
-                                class="form-check-input"
-                                type="radio"
-                                name="vaccineFree"
-                                id="vaccineFreeYes"
-                                value="true"
-                            />
-                            <label class="form-check-label" for="flexRadioDefault1">
-                                Oui
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input
-                                class="form-check-input"
-                                type="radio"
-                                name="vaccineFree"
-                                id="vaccineFreeNo"
-                                value="false"
-                                checked
-                            />
-                            <label class="form-check-label" for="flexRadioDefault2">
-                                Non
-                            </label>
-                        </div>
-                    </form>
+                            <label>Ce vaccin est-il obligatoire en Belgique?</label>
+                            <div class="form-check" id="free">
+                                <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="vaccineMandatory"
+                                    id="vaccineMandatoryYes"
+                                    value="true"
+                                />
+                                <label class="form-check-label" for="flexRadioDefault1">
+                                    Oui
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="vaccineMandatory"
+                                    id="vaccineMandatoryNo"
+                                    value="false"
+                                    checked
+                                />
+                                <label class="form-check-label" for="flexRadioDefault2">
+                                    Non
+                                </label>
+                            </div>
+                            <label>Ce vaccin est-il gratuit en Belgique?</label>
+                            <div class="form-check" id="mandatory">
+                                <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="vaccineFree"
+                                    id="vaccineFreeYes"
+                                    value="true"
+                                />
+                                <label class="form-check-label" for="flexRadioDefault1">
+                                    Oui
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="vaccineFree"
+                                    id="vaccineFreeNo"
+                                    value="false"
+                                    checked
+                                />
+                                <label class="form-check-label" for="flexRadioDefault2">
+                                    Non
+                                </label>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        Fermer
+                    </button>
+                    <button
+                        type="button submit"
+                        class="btn btn-primary"
+                        data-toggle="modal"
+                        id="add-vaccine-ref-btn"
+                    >
+                        Ajouter
+                    </button>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                    Fermer
-                </button>
-                <button
-                type="button submit"
-                class="btn btn-primary"
-                data-toggle="modal"
-                id="add-vaccine-ref-btn"
-            >
-                Ajouter
-            </button>
-            </div>
-            </div>
-
         </div>
     </div>
 
@@ -153,9 +155,7 @@
         <tbody></tbody>
     </table>
 
-    <hr>
-    
-
+    <hr />
 
     <h4 class="mt4">Sources</h4>
     <ul>
