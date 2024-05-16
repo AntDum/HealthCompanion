@@ -128,7 +128,7 @@ def add_vaccine_ref():
     free = data["free"]
     
     vaccine_ref = {
-        "vaccine_name": vaccine_name,
+        "vaccines_name": vaccine_name,
         "against": against,
         "mandatory": {"Belgique":mandatory},
         "free": free,

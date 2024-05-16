@@ -1,43 +1,79 @@
 [
     {
-        "vaccines_name":"Triaxis", 
-        "against": ["Diphtérie", "Tétanos",  "Coqueluche"],
+        "vaccines_name":"Triaxis (Sanofi Belgium) ", 
+        "against": ["Diphtérie", "Tétanos",  "Poliomyélite"],
         "mandatory": {"Belgique": true}, 
         "free": true
     },
     {
-        "vaccines_name":"Grippe saisonnière", 
+        "vaccines_name":"Boostrix Polio (GlaxoSmithKline) ", 
+        "against": ["Diphtérie", "Tétanos","Coqueluche",  "Poliomyélite"],
+        "mandatory": {"Belgique": true}, 
+        "free": true
+    },
+    {
+        "vaccines_name":"Alpha-Rix Tetra (GlaxoSmithKline)", 
         "against": ["Grippe saisonnière"],
         "mandatory": {"Belgique": false}, 
         "free": null
     },
     {
-        "vaccines_name":"M.M.R VaxPro", 
+        "vaccines_name":"Vaxigrip Tetra (Sanofi Belgium)", 
+        "against": ["Grippe saisonnière"],
+        "mandatory": {"Belgique": false}, 
+        "free": null
+    },
+    {
+        "vaccines_name":"M.M.R VaxPro (MSD)", 
         "against": ["Oreillons", "Rougeole",  "Rubéole"],
         "mandatory": {"Belgique": true}, 
         "free": true
     },
     {
-        "vaccines_name":"Covid-19", 
+        "vaccines_name":"Priorix (GlaxoSmithKline)", 
+        "against": ["Oreillons", "Rougeole",  "Rubéole"],
+        "mandatory": {"Belgique": true}, 
+        "free": true
+    },
+    {
+        "vaccines_name":"Spikevax (Moderna)", 
         "against": ["Covid-19"],
         "mandatory": {"Belgique": false}, 
         "free": null
     },
     {
-        "vaccines_name":"Poliomyélite", 
-        "against": ["Poliomyélite"],
+        "vaccines_name":"Janssen", 
+        "against": ["Covid-19"],
         "mandatory": {"Belgique": false}, 
         "free": null
     },
     {
-        "vaccines_name":"Papillomavirus", 
-        "against": ["Poliomyélite"],
+        "vaccines_name":"Nuvaxovid (Novavax)", 
+        "against": ["Covid-19"],
         "mandatory": {"Belgique": false}, 
         "free": null
     },
     {
-        "vaccines_name":"Varicelle", 
+        "vaccines_name":"Cervarix (GlaxoSmithKline)", 
+        "against": ["Infections à papillomavirus humains (HPV)"],
+        "mandatory": {"Belgique": false}, 
+        "free": null
+    },
+    {
+        "vaccines_name":"Varivax (MSD)", 
         "against": ["Varicelle"],
+        "mandatory": {"Belgique": false}, 
+        "free": null
+    },
+    {
+        "vaccines_name":"Varilix (GlaxoSmithKline)", 
+        "against": ["Varicelle"],
+        "mandatory": {"Belgique": false}, 
+        "free": null
+    },
+    {
+        "vaccines_name":"Twinrix (GlaxoSmithKline)", 
+        "against": ["Hépatite A, Hépatite B"],
         "mandatory": {"Belgique": false}, 
         "free": null
     }
