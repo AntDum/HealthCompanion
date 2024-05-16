@@ -20,7 +20,7 @@ def before_request():
 
 
 # Route pour récupérer la liste des patients
-@api_data.route("/api/patients")
+@api_data.route("/patients")
 def get_patients():
     patients = db.get_all_patients()
 
@@ -28,46 +28,7 @@ def get_patients():
 
     return jsonify(response)
 
-
-# Route pour récupérer les rappels et notifications pour le médecin
-@api_data.route("/api/doctor/notifications")
-def get_doctor_notifications():
-    return jsonify(db.get_doctor_notifications())
-
-
-# Route pour récupérer les rendez-vous avec les patients
-@api_data.route("/api/appointments")
-def get_appointments():
-    return jsonify(db.get_appointments())
-
-
-# Route pour que le médecin puisse envoyer un message au patient
-@api_data.route("/api/doctor/message", methods=["POST"])
-def send_message_to_patient():
-    data = request.get_json()
-    message = data["message"]
-    # Simuler une réponse du patient pour la démonstration
-    response_message = "Merci pour votre message. Je vais bien, merci."
-    return jsonify({"message": response_message})
-
-# Nouvelle route pour récupérer les données de santé du patient
-@api_data.route("/api/patients/health-data")
-def get_patient_health_data():
-    return jsonify(db.get_patient_health_data())
-
-
-# # Nouvelle route pour récupérer les rappels et notifications du patient
-# @api_data.route('/api/patients/reminders')
-# def get_patient_reminders():
-#     return jsonify(db.get_patient_reminders())
-
-# Nouvelle route pour récupérer les médicaments et vaccinations du patient
-# @api_data.route('/api/patients/medications')
-# def get_patient_medications():
-#     return jsonify(db.get_patient_medications())
-
-
-@api_data.route("/api/patients/vaccine", methods=["POST"])
+@api_data.route("/patients/vaccine", methods=["POST"])
 def add_vaccine():
     data = json.loads(request.get_data())
 
@@ -88,16 +49,16 @@ def add_vaccine():
     return jsonify({"message": "Vaccine added successfully"})
 
 
-@api_data.route("/api/patients/vaccine", methods=["GET"])
+@api_data.route("/patients/vaccine", methods=["GET"])
 def get_vaccines():
     return jsonify(db.get_patient_vaccines(session["id"]))
 
-@api_data.route("/api/patients/vaccine_reminders", methods=["GET"])
+@api_data.route("/patients/vaccine_reminders", methods=["GET"])
 def get_vaccine_reminders():
     return jsonify(db.get_patient_vaccine_reminders(session["id"]))
 
 
-@api_data.route("/api/patients/vaccine_reminders", methods=["POST"])
+@api_data.route("/patients/vaccine_reminders", methods=["POST"])
 def add_vaccine_reminder():
     data = json.loads(request.get_data())
     
@@ -114,11 +75,11 @@ def add_vaccine_reminder():
     return jsonify({"message": "Vaccine reminder added successfully"})
 
 
-@api_data.route("/api/vaccine/ref", methods=["GET"])
+@api_data.route("/vaccine/ref", methods=["GET"])
 def get_vaccine_ref():
     return jsonify(db.get_all_vaccines_ref())
 
-@api_data.route("/api/vaccine/ref", methods=["POST"])
+@api_data.route("/vaccine/ref", methods=["POST"])
 def add_vaccine_ref():
     data = json.loads(request.get_data())
     

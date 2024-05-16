@@ -1,0 +1,491 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Health Companion API",
+        "version": "1.0.0",
+        "description": "API for Health Companion application"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:5000"
+        }
+    ],
+    "tags": [
+        {
+            "name": "auth",
+            "description": "Authentication related endpoints"
+        },
+        {
+            "name": "patient",
+            "description": "Patient related endpoints"
+        },
+        {
+            "name": "vaccine",
+            "description": "Vaccine related endpoints"
+        }
+    ],
+    "paths": {
+        "/api/patients": {
+            "get": {
+                "tags": ["patient"],
+                "summary": "Get list of patients",
+                "responses": {
+                    "200": {
+                        "description": "List of patients",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "string"
+                                            },
+                                            "name": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/patients/vaccine": {
+            "get": {
+                "tags": ["patient"],
+                "summary": "Get list of vaccines",
+                "responses": {
+                    "200": {
+                        "description": "List of vaccines",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "date": {
+                                                "type": "string"
+                                            },
+                                            "name": {
+                                                "type": "string"
+                                            },
+                                            "patient_name": {
+                                                "type": "string"
+                                            },
+                                            "patient_id": {
+                                                "type": "string"
+                                            },
+                                            "doctor_name": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": ["patient"],
+                "summary": "Add a new vaccine",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "date": {
+                                        "type": "string"
+                                    },
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "patient_name": {
+                                        "type": "string"
+                                    },
+                                    "patient_id": {
+                                        "type": "string"
+                                    },
+                                    "doctor_name": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": ["date", "name", "patient_id", "patient_name"]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Vaccine added successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Vaccine added successfully"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/patients/vaccine_reminders": {
+            "get": {
+                "tags": ["patient"],
+                "summary": "Get list of vaccine reminders",
+                "responses": {
+                    "200": {
+                        "description": "List of vaccine reminders",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "due_date": {
+                                                "type": "string"
+                                            },
+                                            "vaccine_name": {
+                                                "type": "string"
+                                            },
+                                            "patient_name": {
+                                                "type": "string"
+                                            },
+                                            "patient_id": {
+                                                "type": "string"
+                                            },
+                                            "doctor": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": ["patient"],
+                "summary": "Add a new vaccine reminder",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "due_date": {
+                                        "type": "string"
+                                    },
+                                    "vaccine_name": {
+                                        "type": "string"
+                                    },
+                                    "patient_name": {
+                                        "type": "string"
+                                    },
+                                    "patient_id": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": ["due_date", "vaccine_name", "patient_id", "patient_name"]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Vaccine reminder added successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Vaccine reminder added successfully"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                }
+            }
+        },
+        "/api/vaccine/ref": {
+            "get": {
+                "tags": ["vaccine"],
+                "summary": "Get list of vaccine references",
+                "responses": {
+                    "200": {
+                        "description": "List of vaccine references",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "vaccine_name": {
+                                                "type": "string"
+                                            },
+                                            "against": {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "mandatory": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "Belgique": {
+                                                        "type": "boolean"
+                                                    }
+                                                }
+                                            },
+                                            "free": {
+                                                "type": "boolean"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": ["vaccine"],
+                "summary": "Add a new vaccine reference",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "vaccine_name": {
+                                        "type": "string"
+                                    },
+                                    "against": {
+                                        "type": "string"
+                                    },
+                                    "mandatory": {
+                                        "type": "boolean"
+                                    },
+                                    "free": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "required": ["vaccine_name", "against", "mandatory", "free"]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Vaccine reference added successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Vaccine reference added successfully"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/register": {
+            "post": {
+                "tags": ["auth"],
+                "summary": "Register a new user",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    },
+                                    "birthdate": {
+                                        "type": "string"
+                                    },
+                                    "role": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": ["name", "email", "password", "birthdate", "role"]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User registered successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string"
+                                        },
+                                        "role": {
+                                            "type": "string"
+                                        },
+                                        "name": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/login": {
+            "post": {
+                "tags": ["auth"],
+                "summary": "Login user",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": ["email", "password"]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User logged in successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string"
+                                        },
+                                        "role": {
+                                            "type": "string"
+                                        },
+                                        "name": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/logout": {
+            "post": {
+                "tags": ["auth"],
+                "summary": "Logout user",
+                "responses": {
+                    "200": {
+                        "description": "User logged out successfully"
+                    }
+                }
+            },
+            "get": {
+                "tags": ["auth"],
+                "summary": "Logout user",
+                "responses": {
+                    "200": {
+                        "description": "User logged out successfully"
+                    }
+                }
+            }
+        }
+    }
+}

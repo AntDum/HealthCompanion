@@ -27,12 +27,12 @@ def get_client():
 def make_default_db():
     client = get_client()
     client.reset()
-    # if not 'users' in client.listDatabases():
-    create_dbs(client)
-    populate_vaccine_references(client)
-    create_fictive_data(client)
+    if not 'patients' in client.listDatabases():
+        create_dbs(client)
+        populate_vaccine_references(client)
+        create_fictive_data(client)
 
-    make_all_view(client)
+        make_all_view(client)
 
 
 def create_dbs(client):
