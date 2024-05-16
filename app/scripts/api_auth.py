@@ -6,7 +6,7 @@ api_auth = Blueprint('api_auth', __name__)
 
 
 # Route pour récupérer la liste des patients
-@api_auth.route('/auth/register', methods=['POST'])
+@api_auth.route('/register', methods=['POST'])
 def register():
     data = json.loads(request.get_data())
     
@@ -70,7 +70,7 @@ def register():
 
     return jsonify({'error': 'Unknown error'}), 500
 
-@api_auth.route('/auth/login', methods=['POST'])
+@api_auth.route('/login', methods=['POST'])
 def login():
     
     data = json.loads(request.get_data())
@@ -112,7 +112,7 @@ def login():
     
     return jsonify({'error': 'Invalid credentials'}), 401
 
-@api_auth.route('/auth/logout', methods=['GET','POST'])
+@api_auth.route('/logout', methods=['GET','POST'])
 def logout():
     
     if 'loggedin' in session:
