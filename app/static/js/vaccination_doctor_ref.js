@@ -24,6 +24,51 @@ function updateTableVaccineRef() {
     )
 }
 
+//  https://www.w3schools.com/howto/howto_js_filter_table.asp
+function filter_vaccines_ref(column_idx) {
+    // Declare variables
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("myInput"); // retrieve the input from the search bar
+    filter = input.value.toUpperCase();
+    table = document.getElementById("table-ref");
+    tr = table.getElementsByTagName("tr");
+    // Loop through all table rows, and hide those who don't match the search query
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[column_idx];
+      if (td) {
+        txtValue = td.textContent || td.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  }
+
+function filter_vaccines_ref_by(){
+    input = document.getElementById("search_type").value;
+    // console.log("input", input)
+    switch(input) {
+    case "vaccine":
+        filter_vaccines_ref(0);
+        break;
+    case "disease":
+        filter_vaccines_ref(1);
+        break;
+    case "mandatory":
+        filter_vaccines_ref(2);
+        break;
+    case "free":
+        filter_vaccines_ref(3);
+        break;
+    default:
+        filter_vaccines_ref(1);
+    }
+
+}
+
+
 function makeListenerFormVaccine() {
     // TODO (Béa) : C'est ici que tu vas mettre l'event $(#id).on("submit", function)
     $("#add-vaccine-ref-btn").on("click", function (event) {
