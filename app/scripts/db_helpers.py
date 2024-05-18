@@ -30,9 +30,9 @@ def make_default_db(fict_data = False):
         client.reset()
         create_dbs(client)
         populate_vaccine_references(client)
-        if fict_data: create_fictive_data(client)
-
         make_all_view(client)
+    if fict_data: create_fictive_data(client)
+
 
 
 def create_dbs(client):
@@ -68,21 +68,6 @@ def create_fictive_data(client):
     for patient in patients_data:
         client.addDocument("patients", patient)
 
-    # Health Records
-    with open(data_dir / "HR_fict.json", "r", encoding="utf-8") as file:
-        health_records = json.load(file)
-
-    for health_record in health_records:
-        health_record["type"] = "measure"
-        client.addDocument("patients", health_record)
-
-    # Posologie
-    with open(data_dir / "posologie_fict.json", "r", encoding="utf-8") as file:
-        posologie = json.load(file)
-
-    for medication in posologie:
-        medication["type"] = "medication"
-        client.addDocument("patients", medication)
 
     # Doctors
     with open(data_dir / "doctor_fict.json", "r", encoding="utf-8") as file:

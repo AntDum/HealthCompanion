@@ -2,19 +2,22 @@
     {
         "type": "patient",
         "name": "Jean Dupont",
-        "birthdate": "29/2/2000",
-        "last_visit": "2022-04-01"
+        "email":"jean.dupont@gmail.com",
+        "password": "password",
+        "birthdate": "29/2/2000"
     },
     {
         "type": "patient",
-        "name": "Marie Martin",
-        "birthdate": "29/2/2000",
-        "last_visit": "2022-03-28"
+        "name": "Gertrude Tulipe",
+        "email":"gertrude.tulipe@gmail.com",
+        "password": "password",
+        "birthdate": "29/2/2000"
     },
     {
         "type": "patient",
         "name": "Pierre Dubois",
-        "birthdate": "29/2/2000",
-        "last_visit": "2022-03-15"
+        "email":"pierre.dubois@gmail.com",
+        "password": "password",
+        "birthdate": "29/2/2000"
     }
 ]

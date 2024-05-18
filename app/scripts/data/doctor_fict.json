@@ -1,8 +1,8 @@
 [
     {
-        "name": "Dr. Dupont",
-        "birthdate": "29/2/2000",
-        "email": "contact@nop.com",
-        "password": "123456"
+        "type": "doctor",
+        "name": "Jean-Eude Marmotteux",
+        "email": "doc.jean.eude@gmail.com",
+        "password": "password"
     }
 ]
